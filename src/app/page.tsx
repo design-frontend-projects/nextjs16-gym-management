@@ -1,17 +1,15 @@
 "use client";
 
 import { useAuthStore } from "@/stores/authStore";
-import ClientNavbar from "@/components/ClientNavbar";
-import AnalyticsCards from "@/components/AnalyticsCards";
-import SubscriptionCard from "@/components/SubscriptionCard";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const { user, isLoading } = useAuthStore();
+  const { user, isLoading, role } = useAuthStore();
 
   const router = useRouter();
 
