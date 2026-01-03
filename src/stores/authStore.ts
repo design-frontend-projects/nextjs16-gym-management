@@ -9,6 +9,7 @@ interface AuthState {
   role: "member" | "coach" | "admin" | null;
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string, data?: any) => Promise<void>;
   signOut: () => Promise<void>;
   setUser: (user: User | null, session: Session | null) => void;
 }
@@ -18,6 +19,20 @@ export const useAuthStore = create<AuthState>((set) => ({
   session: null,
   role: null,
   isLoading: true,
+  signUp: async (email, password, options) => {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: options,
+      },
+    });
+    if (error) {
+      console.error("Auth signUp error:", error.message);
+      throw error;
+    }
+    // We don't automatically set session here because email verification might be required
+  },
   signIn: async (email, password) => {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
