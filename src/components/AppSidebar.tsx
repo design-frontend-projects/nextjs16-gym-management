@@ -47,6 +47,11 @@ const adminItems = [
     icon: Users,
   },
   {
+    title: "Profile",
+    url: "/dashboard/profile",
+    icon: UserCircle,
+  },
+  {
     title: "Coaches",
     url: "/dashboard/coaches",
     icon: Dumbbell,

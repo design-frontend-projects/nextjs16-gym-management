@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Sidebar,
   SidebarContent,
@@ -52,6 +52,16 @@ const clientItems = [
 export function ClientSidebar() {
   const pathname = usePathname();
   const { signOut, user } = useAuthStore();
+  const router = useRouter();
+
+  const doSignOut = async () => {
+    try {
+      await signOut();
+      router.push("/");
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
 
   return (
     <Sidebar collapsible="icon">
@@ -121,7 +131,7 @@ export function ClientSidebar() {
                 align="end"
                 sideOffset={4}
               >
-                <DropdownMenuItem onClick={() => signOut()}>
+                <DropdownMenuItem onClick={() => doSignOut()}>
                   <LogOut className="mr-2 h-4 w-4" />
                   Log out
                 </DropdownMenuItem>
