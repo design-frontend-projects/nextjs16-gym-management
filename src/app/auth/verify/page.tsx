@@ -84,7 +84,7 @@ function VerifyForm() {
         <CardHeader>
           <CardTitle>Verify Account</CardTitle>
           <CardDescription>
-            Enter the 6-digit code sent to {email}
+            Enter the 8-digit code sent to {email}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -102,7 +102,7 @@ function VerifyForm() {
                   <FormItem>
                     <FormLabel>One-Time Password</FormLabel>
                     <FormControl>
-                      <InputOTP maxLength={6} {...field}>
+                      <InputOTP maxLength={8} {...field}>
                         <InputOTPGroup>
                           <InputOTPSlot index={0} />
                           <InputOTPSlot index={1} />
@@ -110,6 +110,8 @@ function VerifyForm() {
                           <InputOTPSlot index={3} />
                           <InputOTPSlot index={4} />
                           <InputOTPSlot index={5} />
+                          <InputOTPSlot index={6} />
+                          <InputOTPSlot index={7} />
                         </InputOTPGroup>
                       </InputOTP>
                     </FormControl>

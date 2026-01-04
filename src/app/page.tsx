@@ -13,31 +13,31 @@ export default function Home() {
 
   const router = useRouter();
 
-  useEffect(() => {
-    if (!isLoading && user) {
-      if (role === "member") {
-        router.push("/client/dashboard");
-      } else {
-        router.push("/dashboard");
-      }
-    }
-  }, [user, isLoading, role, router]);
+  // useEffect(() => {
+  //   if (!isLoading && user) {
+  //     if (role === "member") {
+  //       router.push("/client/dashboard");
+  //     } else {
+  //       router.push("/dashboard");
+  //     }
+  //   }
+  // }, [user, isLoading, role, router]);
 
-  if (isLoading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="flex h-screen items-center justify-center">
+  //       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+  //     </div>
+  //   );
+  // }
 
-  if (user) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <p>Redirecting to your dashboard...</p>
-      </div>
-    );
-  }
+  // if (user) {
+  //   return (
+  //     <div className="flex h-screen items-center justify-center">
+  //       <p>Redirecting to your dashboard...</p>
+  //     </div>
+  //   );
+  // }
 
   // Public Landing Page
   return (
@@ -54,7 +54,7 @@ export default function Home() {
             Log in
           </Link>
           <Button asChild>
-            <Link href="/auth/register">Get Started</Link>
+            <Link href="/auth/signup">Get Started</Link>
           </Button>
         </div>
       </header>
@@ -71,7 +71,7 @@ export default function Home() {
           </p>
           <div className="flex justify-center gap-4">
             <Button size="lg" asChild>
-              <Link href="/auth/register">
+              <Link href="/auth/signup">
                 Start Free Trial <ArrowRight className="ml-2 w-4 h-4" />
               </Link>
             </Button>
