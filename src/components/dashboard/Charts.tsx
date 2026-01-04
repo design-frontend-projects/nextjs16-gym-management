@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import {
   ResponsiveContainer,
@@ -53,7 +54,7 @@ export const Charts: React.FC<ChartsProps> = ({
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* Weight Progress Line Chart */}
       <div className="bg-white/10 backdrop-blur rounded-xl p-4">
-        <h2 className="text-lg font-medium text-white/80 mb-2">
+        <h2 className="text-lg font-medium text-slate-700/80 mb-2">
           Weight Progress
         </h2>
         <ResponsiveContainer width="100%" height={300}>
@@ -78,7 +79,7 @@ export const Charts: React.FC<ChartsProps> = ({
 
       {/* Sessions per Status Bar Chart */}
       <div className="bg-white/10 backdrop-blur rounded-xl p-4">
-        <h2 className="text-lg font-medium text-white/80 mb-2">
+        <h2 className="text-lg font-medium text-slate-700/80 mb-2">
           Sessions by Status
         </h2>
         <ResponsiveContainer width="100%" height={300}>

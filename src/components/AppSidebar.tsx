@@ -33,6 +33,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useRouter } from "next/navigation";
 
 const adminItems = [
   {
@@ -70,6 +71,16 @@ const adminItems = [
 export function AppSidebar() {
   const pathname = usePathname();
   const { signOut, user, role } = useAuthStore();
+  const router = useRouter();
+
+  const doSignOut = async () => {
+    try {
+      await signOut();
+      router.push("/");
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
 
   return (
     <Sidebar collapsible="icon">
@@ -144,7 +155,7 @@ export function AppSidebar() {
                 align="end"
                 sideOffset={4}
               >
-                <DropdownMenuItem onClick={() => signOut()}>
+                <DropdownMenuItem onClick={() => doSignOut()}>
                   <LogOut className="mr-2 h-4 w-4" />
                   Log out
                 </DropdownMenuItem>

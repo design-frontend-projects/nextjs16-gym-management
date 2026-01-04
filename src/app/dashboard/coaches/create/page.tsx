@@ -31,10 +31,12 @@ export default function CreateCoachPage() {
   };
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Add New Coach</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
+    <div className="p-6 grid grid-cols-12 gap-2 mx-auto">
+      <div className="col-span-12">
+        <h1 className="text-2xl font-bold mb-4">Add New Coach</h1>
+      </div>
+      <form onSubmit={handleSubmit} className="grid col-span-full gap-2">
+        <div className="col-span-12">
           <label className="block mb-1">First Name</label>
           <input
             name="first_name"
@@ -44,7 +46,7 @@ export default function CreateCoachPage() {
             required
           />
         </div>
-        <div>
+        <div className="col-span-12">
           <label className="block mb-1">Last Name</label>
           <input
             name="last_name"
@@ -54,7 +56,7 @@ export default function CreateCoachPage() {
             required
           />
         </div>
-        <div>
+        <div className="col-span-12">
           <label className="block mb-1">Email</label>
           <input
             name="email"
@@ -65,7 +67,7 @@ export default function CreateCoachPage() {
             required
           />
         </div>
-        <div>
+        <div className="col-span-12">
           <label className="block mb-1">Phone</label>
           <input
             name="phone"
@@ -74,7 +76,7 @@ export default function CreateCoachPage() {
             className="w-full border rounded p-2"
           />
         </div>
-        <div>
+        <div className="col-span-12">
           <label className="block mb-1">Specialization</label>
           <input
             name="specialization"
