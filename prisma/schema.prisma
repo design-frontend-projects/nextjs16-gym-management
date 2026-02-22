@@ -38,7 +38,10 @@ model clients {
   created_at        DateTime            @default(now()) @db.Timestamptz(6)
   updated_at        DateTime            @default(now()) @db.Timestamptz(6)
   deleted_at        DateTime?           @db.Timestamptz(6)
+  attendance_logs   attendance_logs[]
   body_measurements body_measurements[]
+  client_programs   client_programs[]
+  client_trainers   client_trainers[]
   profiles          profiles?           @relation(fields: [profile_id], references: [id], onUpdate: NoAction)
   tenants           tenants             @relation(fields: [tenant_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   subscriptions     subscriptions[]
@@ -112,6 +115,7 @@ model profiles {
   clients       clients?
   media_library media_library[]
   tenants       tenants         @relation(fields: [tenant_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  trainers      trainers?
 
   @@index([clerk_user_id], map: "idx_profiles_clerk")
   @@index([tenant_id], map: "idx_profiles_tenant")
@@ -139,35 +143,43 @@ model subscriptions {
 }
 
 model tenants {
-  id                String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name              String              @db.VarChar(150)
-  slug              String              @unique @db.VarChar(150)
-  subscription_plan String?             @db.VarChar(50)
-  is_active         Boolean             @default(true)
-  created_at        DateTime            @default(now()) @db.Timestamptz(6)
-  updated_at        DateTime            @default(now()) @db.Timestamptz(6)
-  deleted_at        DateTime?           @db.Timestamptz(6)
-  body_measurements body_measurements[]
-  clients           clients[]
-  media_library     media_library[]
-  membership_plans  membership_plans[]
-  payments          payments[]
-  profiles          profiles[]
-  subscriptions     subscriptions[]
-  workout_programs  workout_programs[]
-  workout_sessions  workout_sessions[]
+  id                  String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                String                @db.VarChar(150)
+  slug                String                @unique @db.VarChar(150)
+  subscription_plan   String?               @db.VarChar(50)
+  is_active           Boolean               @default(true)
+  created_at          DateTime              @default(now()) @db.Timestamptz(6)
+  updated_at          DateTime              @default(now()) @db.Timestamptz(6)
+  deleted_at          DateTime?             @db.Timestamptz(6)
+  attendance_logs     attendance_logs[]
+  body_measurements   body_measurements[]
+  branches            branches[]
+  clients             clients[]
+  exercise_categories exercise_categories[]
+  exercises           exercises[]
+  gym_settings        gym_settings?
+  media_library       media_library[]
+  membership_plans    membership_plans[]
+  payments            payments[]
+  profiles            profiles[]
+  subscriptions       subscriptions[]
+  trainers            trainers[]
+  workout_programs    workout_programs[]
+  workout_sessions    workout_sessions[]
 }
 
 model workout_programs {
-  id               String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tenant_id        String                @db.Uuid
-  name             String                @db.VarChar(150)
-  goal_type        String?               @db.VarChar(100)
-  difficulty       difficulty_level_enum
-  description      String?
-  created_at       DateTime?             @default(now()) @db.Timestamptz(6)
-  tenants          tenants               @relation(fields: [tenant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  workout_sessions workout_sessions[]
+  id                String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id         String                @db.Uuid
+  name              String                @db.VarChar(150)
+  goal_type         String?               @db.VarChar(100)
+  difficulty        difficulty_level_enum
+  description       String?
+  created_at        DateTime?             @default(now()) @db.Timestamptz(6)
+  client_programs   client_programs[]
+  program_exercises program_exercises[]
+  tenants           tenants               @relation(fields: [tenant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  workout_sessions  workout_sessions[]
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
@@ -182,6 +194,128 @@ model workout_sessions {
   clients          clients?          @relation(fields: [client_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   workout_programs workout_programs? @relation(fields: [program_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   tenants          tenants           @relation(fields: [tenant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model trainers {
+  id               String                    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id        String                    @db.Uuid
+  profile_id       String                    @unique @db.Uuid
+  bio              String?
+  experience_years Int?
+  created_at       DateTime                  @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime                  @default(now()) @db.Timestamptz(6)
+  client_trainers  client_trainers[]
+  specializations  trainer_specializations[]
+  profiles         profiles                  @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  tenants          tenants                   @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+}
+
+model trainer_specializations {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  trainer_id String   @db.Uuid
+  name       String   @db.VarChar(100)
+  trainers   trainers @relation(fields: [trainer_id], references: [id], onDelete: Cascade)
+
+  @@unique([trainer_id, name])
+}
+
+model client_trainers {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  client_id   String   @db.Uuid
+  trainer_id  String   @db.Uuid
+  assigned_at DateTime @default(now()) @db.Timestamptz(6)
+  status      String   @default("active") @db.VarChar(20)
+  clients     clients  @relation(fields: [client_id], references: [id], onDelete: Cascade)
+  trainers    trainers @relation(fields: [trainer_id], references: [id], onDelete: Cascade)
+
+  @@unique([client_id, trainer_id])
+}
+
+model branches {
+  id              String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id       String            @db.Uuid
+  name            String            @db.VarChar(150)
+  address         String?
+  phone           String?           @db.VarChar(50)
+  is_active       Boolean           @default(true)
+  created_at      DateTime          @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime          @default(now()) @db.Timestamptz(6)
+  attendance_logs attendance_logs[]
+  tenants         tenants           @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+}
+
+model attendance_logs {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id String    @db.Uuid
+  branch_id String    @db.Uuid
+  client_id String    @db.Uuid
+  check_in  DateTime  @default(now()) @db.Timestamptz(6)
+  check_out DateTime? @db.Timestamptz(6)
+  status    String    @default("present") @db.VarChar(50)
+  branches  branches  @relation(fields: [branch_id], references: [id], onDelete: Cascade)
+  clients   clients   @relation(fields: [client_id], references: [id], onDelete: Cascade)
+  tenants   tenants   @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+}
+
+model exercise_categories {
+  id        String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id String      @db.Uuid
+  name      String      @db.VarChar(100)
+  tenants   tenants     @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+  exercises exercises[]
+}
+
+model exercises {
+  id                String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id         String                @db.Uuid
+  category_id       String?               @db.Uuid
+  name              String                @db.VarChar(150)
+  muscle_group      String?               @db.VarChar(100)
+  difficulty        difficulty_level_enum @default(beginner)
+  video_url         String?
+  thumbnail_url     String?
+  description       String?
+  created_at        DateTime              @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime              @default(now()) @db.Timestamptz(6)
+  categories        exercise_categories?  @relation(fields: [category_id], references: [id])
+  tenants           tenants               @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+  program_exercises program_exercises[]
+}
+
+model program_exercises {
+  id               String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  program_id       String           @db.Uuid
+  exercise_id      String           @db.Uuid
+  sets             Int?
+  reps             Int?
+  duration_seconds Int?
+  rest_seconds     Int?
+  order_index      Int              @default(0)
+  exercises        exercises        @relation(fields: [exercise_id], references: [id], onDelete: Cascade)
+  workout_programs workout_programs @relation(fields: [program_id], references: [id], onDelete: Cascade)
+}
+
+model client_programs {
+  id               String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  client_id        String           @db.Uuid
+  program_id       String           @db.Uuid
+  assigned_at      DateTime         @default(now()) @db.Timestamptz(6)
+  status           String           @default("active") @db.VarChar(50)
+  clients          clients          @relation(fields: [client_id], references: [id], onDelete: Cascade)
+  workout_programs workout_programs @relation(fields: [program_id], references: [id], onDelete: Cascade)
+}
+
+model gym_settings {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id       String   @unique @db.Uuid
+  branding_logo   String?
+  branding_color  String?  @db.VarChar(50)
+  contact_email   String?  @db.VarChar(150)
+  contact_phone   String?  @db.VarChar(50)
+  operating_hours Json?
+  time_zone       String   @default("UTC") @db.VarChar(50)
+  updated_at      DateTime @default(now()) @db.Timestamptz(6)
+  tenants         tenants  @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
 }
 
 enum difficulty_level_enum {

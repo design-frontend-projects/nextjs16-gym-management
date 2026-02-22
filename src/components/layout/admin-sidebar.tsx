@@ -7,6 +7,9 @@ import {
   Calendar,
   Settings,
   Dumbbell,
+  UserCheck,
+  Building,
+  ClipboardList,
 } from "lucide-react";
 
 export function AdminSidebar({ isMobile = false }: { isMobile?: boolean }) {
@@ -52,11 +55,25 @@ export function AdminSidebar({ isMobile = false }: { isMobile?: boolean }) {
             AI Body Analytics
           </Link>
           <Link
+            href="/admin/trainers"
+            className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+          >
+            <UserCheck className="h-4 w-4" />
+            Trainers
+          </Link>
+          <Link
             href="/admin/exercises"
             className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
           >
             <Dumbbell className="h-4 w-4" />
-            Workout Library
+            Exercises
+          </Link>
+          <Link
+            href="/admin/programs"
+            className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+          >
+            <ClipboardList className="h-4 w-4" />
+            Programs
           </Link>
           <Link
             href="/admin/attendance"
@@ -64,6 +81,13 @@ export function AdminSidebar({ isMobile = false }: { isMobile?: boolean }) {
           >
             <Calendar className="h-4 w-4" />
             Attendance
+          </Link>
+          <Link
+            href="/admin/branches"
+            className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+          >
+            <Building className="h-4 w-4" />
+            Branches
           </Link>
         </nav>
       </div>
