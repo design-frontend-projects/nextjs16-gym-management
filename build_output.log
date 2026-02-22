@@ -1,0 +1,16 @@
+
+> temp_app@0.1.0 build E:\web-projects\web-mobile-work-apps\nextjs16-gym-management
+> next build
+
+▲ Next.js 16.1.6 (Turbopack)
+- Environments: .env
+
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 1 errors:
+./src/app/(client)
+You cannot have two parallel pages that resolve to the same path. Please check /(admin)/dashboard and /(client).
+
+    at ignore-listed frames
+ ELIFECYCLE  Command failed with exit code 1.
