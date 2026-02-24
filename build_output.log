@@ -6,11 +6,36 @@
 - Environments: .env
 
   Creating an optimized production build ...
+✓ Compiled successfully in 1827.5ms
+  Running TypeScript ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/15) ...
+  Generating static pages using 19 workers (3/15) 
+  Generating static pages using 19 workers (7/15) 
+  Generating static pages using 19 workers (11/15) 
+✓ Generating static pages using 19 workers (15/15) in 2.4s
+  Finalizing page optimization ...
 
-> Build error occurred
-Error: Turbopack build failed with 1 errors:
-./src/app/(client)
-You cannot have two parallel pages that resolve to the same path. Please check /(admin)/dashboard and /(client).
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /admin/attendance
+├ ○ /admin/branches
+├ ○ /admin/dashboard
+├ ○ /admin/exercises
+├ ○ /admin/members
+├ ○ /admin/programs
+├ ○ /admin/subscriptions
+├ ○ /admin/trainers
+├ ○ /client/dashboard
+├ ○ /client/dashboard/profile
+├ ○ /client/profile
+├ ƒ /sign-in/[[...sign-in]]
+└ ƒ /sign-up/[[...sign-up]]
 
-    at ignore-listed frames
- ELIFECYCLE  Command failed with exit code 1.
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
