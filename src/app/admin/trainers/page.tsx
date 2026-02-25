@@ -1,13 +1,21 @@
 import React from "react";
-import { getTrainers, type TrainerRow } from "@/actions/trainers";
+import {
+  getTrainers,
+  getAvailableSpecializations,
+  type TrainerRow,
+} from "@/actions/trainers";
 import { TrainersClient } from "./trainers-client";
 
 export default async function TrainersPage() {
   let trainers: TrainerRow[] = [];
+  let availableSpecializations: string[] = [];
   let error: string | null = null;
 
   try {
-    trainers = await getTrainers();
+    [trainers, availableSpecializations] = await Promise.all([
+      getTrainers(),
+      getAvailableSpecializations(),
+    ]);
   } catch (e) {
     error = e instanceof Error ? e.message : "Failed to load trainers.";
   }
@@ -27,7 +35,10 @@ export default async function TrainersPage() {
           <p className="text-sm mt-1">{error}</p>
         </div>
       ) : (
-        <TrainersClient trainers={trainers} />
+        <TrainersClient
+          trainers={trainers}
+          availableSpecializations={availableSpecializations}
+        />
       )}
     </div>
   );

@@ -1,13 +1,19 @@
 import React from "react";
-import { getMembers, type MemberRow } from "@/actions/members";
+import { getMembers, getRoles, type MemberRow } from "@/actions/members";
 import { MembersClient } from "./members-client";
 
 export default async function MembersPage() {
   let members: MemberRow[] = [];
+  let roles: string[] = [];
   let error: string | null = null;
 
   try {
-    members = await getMembers();
+    const [fetchedMembers, fetchedRoles] = await Promise.all([
+      getMembers(),
+      getRoles(),
+    ]);
+    members = fetchedMembers;
+    roles = fetchedRoles;
   } catch (e) {
     error = e instanceof Error ? e.message : "Failed to load members.";
   }
@@ -28,7 +34,7 @@ export default async function MembersPage() {
           <p className="text-sm mt-1">{error}</p>
         </div>
       ) : (
-        <MembersClient members={members} />
+        <MembersClient members={members} roles={roles} />
       )}
     </div>
   );

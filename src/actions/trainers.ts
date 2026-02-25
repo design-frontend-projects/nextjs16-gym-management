@@ -70,6 +70,25 @@ export async function getTrainers(): Promise<TrainerRow[]> {
   }));
 }
 
+// --------------- Specialization Catalog ---------------
+
+export async function getAvailableSpecializations(): Promise<string[]> {
+  const rows = await prisma.trainer_specializations.findMany({
+    select: { name: true },
+    distinct: ["name"],
+    orderBy: { name: "asc" },
+  });
+  return rows.map((r) => r.name);
+}
+
+export async function deleteSpecializationByName(name: string) {
+  await prisma.trainer_specializations.deleteMany({
+    where: { name },
+  });
+  revalidatePath("/admin/trainers");
+  return { success: true };
+}
+
 // --------------- Mutations ---------------
 
 export async function createTrainer(raw: CreateTrainerInput) {

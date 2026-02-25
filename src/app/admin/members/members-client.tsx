@@ -86,7 +86,13 @@ function formatDate(date: Date | string) {
 
 // --------------- Component ---------------
 
-export function MembersClient({ members }: { members: MemberRow[] }) {
+export function MembersClient({
+  members,
+  roles,
+}: {
+  members: MemberRow[];
+  roles: string[];
+}) {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [addOpen, setAddOpen] = useState(false);
@@ -103,6 +109,7 @@ export function MembersClient({ members }: { members: MemberRow[] }) {
     phone: "",
     gender: "",
     fitnessGoal: "",
+    role: "client",
   });
 
   const resetForm = () =>
@@ -113,6 +120,7 @@ export function MembersClient({ members }: { members: MemberRow[] }) {
       phone: "",
       gender: "",
       fitnessGoal: "",
+      role: "client",
     });
 
   // Stats
@@ -158,6 +166,7 @@ export function MembersClient({ members }: { members: MemberRow[] }) {
           phone: formData.phone,
           gender: formData.gender,
           fitnessGoal: formData.fitnessGoal,
+          role: formData.role,
         });
         setEditOpen(false);
         setSelectedMember(null);
@@ -199,6 +208,7 @@ export function MembersClient({ members }: { members: MemberRow[] }) {
       phone: member.phone || "",
       gender: member.gender || "",
       fitnessGoal: member.fitnessGoal || "",
+      role: member.role || "client",
     });
     setSelectedMember(member);
     setEditOpen(true);
@@ -359,6 +369,24 @@ export function MembersClient({ members }: { members: MemberRow[] }) {
                 </div>
               </div>
               <div className="space-y-2">
+                <Label htmlFor="role">Role</Label>
+                <Select
+                  value={formData.role}
+                  onValueChange={(v) => setFormData((d) => ({ ...d, role: v }))}
+                >
+                  <SelectTrigger id="role" className="capitalize">
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {roles.map((r) => (
+                      <SelectItem key={r} value={r} className="capitalize">
+                        {r.replace("_", " ")}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="fitnessGoal">
                   <Target className="inline h-3.5 w-3.5 mr-1" />
                   Fitness Goal
@@ -439,9 +467,17 @@ export function MembersClient({ members }: { members: MemberRow[] }) {
                       </Avatar>
                       <div className="flex flex-col">
                         <span className="font-medium">{member.fullName}</span>
-                        <span className="text-xs text-muted-foreground">
-                          {member.email}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-muted-foreground">
+                            {member.email}
+                          </span>
+                          <Badge
+                            variant="outline"
+                            className="text-[10px] h-4 px-1.5 capitalize"
+                          >
+                            {member.role?.replace("_", " ")}
+                          </Badge>
+                        </div>
                       </div>
                     </div>
                   </TableCell>
@@ -591,6 +627,24 @@ export function MembersClient({ members }: { members: MemberRow[] }) {
                   </SelectContent>
                 </Select>
               </div>
+            </div>
+            <div className="space-y-2">
+              <Label>Role</Label>
+              <Select
+                value={formData.role}
+                onValueChange={(v) => setFormData((d) => ({ ...d, role: v }))}
+              >
+                <SelectTrigger className="capitalize">
+                  <SelectValue placeholder="Select" />
+                </SelectTrigger>
+                <SelectContent>
+                  {roles.map((r) => (
+                    <SelectItem key={r} value={r} className="capitalize">
+                      {r.replace("_", " ")}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div className="space-y-2">
               <Label>Fitness Goal</Label>

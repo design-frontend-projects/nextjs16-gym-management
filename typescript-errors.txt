@@ -1,0 +1,2 @@
+src/actions/members.ts(110,5): error TS2322: Type 'user_role_type' is not assignable to type '"client"'.
+  Type '"super_admin"' is not assignable to type '"client"'.
